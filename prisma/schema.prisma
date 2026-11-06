@@ -1,0 +1,285 @@
+// AidoPost data model — see docs/mvp-spec.md §7
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Plan {
+  free
+  lite
+  pro
+}
+
+enum BillingPeriod {
+  monthly
+  annual
+}
+
+enum CreditBucket {
+  trial
+  monthly
+  pack
+}
+
+enum BrandSource {
+  typed
+  website
+  social
+  name
+}
+
+enum Style {
+  minimalist
+  casual
+  premium
+}
+
+enum SessionStatus {
+  draft
+  analysing
+  ready
+  failed
+}
+
+enum Variant {
+  A
+  B
+  C
+}
+
+enum GenerationStatus {
+  queued
+  running
+  succeeded
+  failed
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime? @map("email_verified")
+  name          String?
+  image         String?
+  passwordHash  String?   @map("password_hash")
+  authProvider  String    @default("email") @map("auth_provider")
+  uiLanguage    String    @default("en") @map("ui_language")
+  plan          Plan      @default(free)
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  accounts     Account[]
+  subscription Subscription?
+  ledger       CreditLedger[]
+  brands       Brand[]
+  sessions     StudioSession[]
+  purchases    Purchase[]
+
+  @@map("users")
+}
+
+// Auth.js adapter tables
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  purpose    String   @default("verify") // verify | reset
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// One free trial per real identity — survives account deletion.
+model TrialClaim {
+  id        String   @id @default(cuid())
+  identity  String   @unique // normalised email or provider:accountId
+  userId    String   @map("user_id")
+  ip        String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("trial_claims")
+}
+
+model Subscription {
+  id                   String        @id @default(cuid())
+  userId               String        @unique @map("user_id")
+  stripeCustomerId     String        @unique @map("stripe_customer_id")
+  stripeSubscriptionId String?       @unique @map("stripe_subscription_id")
+  plan                 Plan          @default(free)
+  billingPeriod        BillingPeriod @default(monthly) @map("billing_period")
+  status               String        @default("inactive")
+  currentPeriodEnd     DateTime?     @map("current_period_end")
+  lastGrantAt          DateTime?     @map("last_grant_at")
+  updatedAt            DateTime      @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
+
+// Credit balance = SUM(delta). No separate counter to drift.
+model CreditLedger {
+  id           String       @id @default(cuid())
+  userId       String       @map("user_id")
+  delta        Int
+  bucket       CreditBucket
+  reason       String // trial | monthly_grant | monthly_expire | pack | reserve | refund
+  generationId String?      @map("generation_id")
+  refId        String?      @unique @map("ref_id") // idempotency key (stripe invoice id, etc.)
+  createdAt    DateTime     @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([generationId])
+  @@map("credit_ledger")
+}
+
+model Industry {
+  id               String @id // slug, e.g. beauty_cosmetics
+  nameTranslations Json   @map("name_translations")
+  typicalProducts  String @map("typical_products")
+  sortOrder        Int    @default(0) @map("sort_order")
+
+  brands Brand[]
+
+  @@map("industries")
+}
+
+model Brand {
+  id                  String      @id @default(cuid())
+  userId              String      @map("user_id")
+  name                String
+  sourceType          BrandSource @map("source_type")
+  sourceUrl           String?     @map("source_url")
+  description         String      @db.Text
+  descriptionLanguage String      @map("description_language")
+  industryId          String?     @map("industry_id")
+  industryConfidence  Float?      @map("industry_confidence")
+  approvedAt          DateTime    @default(now()) @map("approved_at")
+  createdAt           DateTime    @default(now()) @map("created_at")
+
+  user     User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  industry Industry?       @relation(fields: [industryId], references: [id])
+  sessions StudioSession[]
+
+  @@index([userId])
+  @@map("brands")
+}
+
+model StudioSession {
+  id              String        @id @default(cuid())
+  userId          String        @map("user_id")
+  brandId         String        @map("brand_id")
+  style           Style?
+  aspectRatio     String        @default("1:1") @map("aspect_ratio")
+  productAnalysis Json?         @map("product_analysis") // varB
+  analysisVersion Int           @default(0) @map("analysis_version")
+  prompts         Json? // { A, B, C }
+  status          SessionStatus @default(draft)
+  createdAt       DateTime      @default(now()) @map("created_at")
+
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  brand       Brand          @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  photos      SessionPhoto[]
+  generations Generation[]
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model SessionPhoto {
+  id         String   @id @default(cuid())
+  sessionId  String   @map("session_id")
+  storageKey String   @map("storage_key")
+  width      Int
+  height     Int
+  order      Int
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  session StudioSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("session_photos")
+}
+
+model Generation {
+  id                    String           @id @default(cuid())
+  sessionId             String           @map("session_id")
+  variant               Variant
+  model                 String?
+  status                GenerationStatus @default(queued)
+  stage                 String           @default("queued")
+  storageKeyClean       String?          @map("storage_key_clean")
+  storageKeyWatermarked String?          @map("storage_key_watermarked")
+  width                 Int?
+  height                Int?
+  fidelityOk            Boolean?         @map("fidelity_ok")
+  latencyMs             Int?             @map("latency_ms")
+  costUsd               Float?           @map("cost_usd")
+  error                 String?
+  errorCode             String?          @map("error_code")
+  createdAt             DateTime         @default(now()) @map("created_at")
+
+  session   StudioSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  purchases Purchase[]
+
+  @@unique([sessionId, variant])
+  @@map("generations")
+}
+
+model Purchase {
+  id                  String   @id @default(cuid())
+  userId              String   @map("user_id")
+  generationId        String?  @map("generation_id")
+  kind                String   @default("hd_image") // hd_image | credit_pack
+  stripeSessionId     String   @unique @map("stripe_session_id")
+  stripePaymentIntent String?  @map("stripe_payment_intent")
+  amount              Int
+  status              String
+  createdAt           DateTime @default(now()) @map("created_at")
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  generation Generation? @relation(fields: [generationId], references: [id], onDelete: SetNull)
+
+  @@map("purchases")
+}
+
+model AiCallLog {
+  id           String   @id @default(cuid())
+  generationId String?  @map("generation_id")
+  sessionId    String?  @map("session_id")
+  callType     String   @map("call_type")
+  model        String
+  tokensIn     Int?     @map("tokens_in")
+  tokensOut    Int?     @map("tokens_out")
+  latencyMs    Int      @map("latency_ms")
+  costUsd      Float?   @map("cost_usd")
+  success      Boolean
+  error        String?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([generationId])
+  @@map("ai_call_logs")
+}

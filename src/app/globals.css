@@ -1,0 +1,223 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  --bg: #fbfaff;
+  --bg-soft: #f3f0ff;
+  --fg: #1a1033;
+  --muted: #6b6489;
+  --line: rgb(26 16 51 / 0.09);
+  --card: rgb(255 255 255 / 0.66);
+  --card-solid: #ffffff;
+  --primary: #7c3aed;
+  --primary-fg: #ffffff;
+  --accent: #ec4899;
+  --accent-2: #f59e0b;
+  --ok: #10b981;
+  --danger: #e11d48;
+  --blob-1: #c4b5fd;
+  --blob-2: #fbcfe8;
+  --blob-3: #fde68a;
+  --shadow: 0 10px 40px -12px rgb(76 29 149 / 0.25);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b0716;
+    --bg-soft: #140d26;
+    --fg: #f3f0ff;
+    --muted: #a59fc2;
+    --line: rgb(243 240 255 / 0.1);
+    --card: rgb(28 20 52 / 0.6);
+    --card-solid: #1a1230;
+    --blob-1: #5b21b6;
+    --blob-2: #9d174d;
+    --blob-3: #92400e;
+    --shadow: 0 10px 40px -12px rgb(0 0 0 / 0.6);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0b0716;
+  --bg-soft: #140d26;
+  --fg: #f3f0ff;
+  --muted: #a59fc2;
+  --line: rgb(243 240 255 / 0.1);
+  --card: rgb(28 20 52 / 0.6);
+  --card-solid: #1a1230;
+  --blob-1: #5b21b6;
+  --blob-2: #9d174d;
+  --blob-3: #92400e;
+  --shadow: 0 10px 40px -12px rgb(0 0 0 / 0.6);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-soft: var(--bg-soft);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-card: var(--card);
+  --color-card-solid: var(--card-solid);
+  --color-primary: var(--primary);
+  --color-primary-fg: var(--primary-fg);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-ok: var(--ok);
+  --color-danger: var(--danger);
+  --font-sans:
+    var(--font-inter), var(--font-armenian), var(--font-arabic), ui-sans-serif, system-ui,
+    sans-serif;
+  --font-display:
+    var(--font-display-face), var(--font-inter), var(--font-armenian), var(--font-arabic),
+    ui-sans-serif, system-ui;
+  --shadow-soft: var(--shadow);
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  overflow-x: clip; /* decorative blobs must never cause sideways scroll */
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Arabic reads better without letter-spacing tweaks */
+[dir="rtl"] .tracking-tight,
+[dir="rtl"] .tracking-tighter {
+  letter-spacing: 0;
+}
+
+.glass {
+  background: var(--card);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid var(--line);
+}
+
+.text-gradient {
+  background: linear-gradient(100deg, var(--primary), var(--accent) 55%, var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bg-brand {
+  background: linear-gradient(110deg, var(--primary), var(--accent));
+}
+
+/* Soft gradient mesh */
+.mesh {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.mesh::before,
+.mesh::after,
+.mesh > span {
+  content: "";
+  position: absolute;
+  width: 46vmax;
+  height: 46vmax;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.55;
+  animation: drift 22s ease-in-out infinite alternate;
+}
+.mesh::before {
+  background: var(--blob-1);
+  top: -18vmax;
+  inset-inline-start: -10vmax;
+}
+.mesh::after {
+  background: var(--blob-2);
+  top: -6vmax;
+  inset-inline-end: -14vmax;
+  animation-delay: -7s;
+}
+.mesh > span {
+  background: var(--blob-3);
+  top: 22vmax;
+  inset-inline-start: 30%;
+  opacity: 0.35;
+  animation-delay: -14s;
+}
+
+@keyframes drift {
+  to {
+    transform: translate3d(6vmax, 4vmax, 0) scale(1.12);
+  }
+}
+
+@keyframes morph {
+  0%,
+  100% {
+    border-radius: 42% 58% 63% 37% / 41% 44% 56% 59%;
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    border-radius: 58% 42% 38% 62% / 55% 61% 39% 45%;
+    transform: rotate(160deg) scale(1.08);
+  }
+}
+.blob-morph {
+  animation: morph 9s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+[dir="rtl"] .marquee-track {
+  animation-direction: reverse;
+}
+.marquee-track {
+  animation: marquee 50s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(200%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.focus-ring {
+  @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
