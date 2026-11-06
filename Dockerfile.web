@@ -8,6 +8,11 @@ RUN npm ci
 
 FROM deps AS build
 COPY . .
+# NEXT_PUBLIC_* values are baked into the browser bundle at build time; Railway passes
+# service variables to the Docker build only for ARGs declared here.
+ARG NEXT_PUBLIC_POSTHOG_KEY
+ARG NEXT_PUBLIC_POSTHOG_HOST
+ENV NEXT_PUBLIC_POSTHOG_KEY=$NEXT_PUBLIC_POSTHOG_KEY NEXT_PUBLIC_POSTHOG_HOST=$NEXT_PUBLIC_POSTHOG_HOST
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 

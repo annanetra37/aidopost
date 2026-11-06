@@ -65,11 +65,20 @@ Prices and limits live in `src/lib/plans.ts` and mirror the spec:
 - **Watermarking**: the clean original is always stored. The watermark is added only when an image is downloaded or previewed, so upgrading unlocks every past image.
 - **Free users** see the Renderforest-style 3-card download modal. **Paid users** pick size and aspect ratio directly.
 
-### Stripe setup
+### Payments: Paddle (default) or Stripe
 
-1. Create the products and prices, and put their IDs in `STRIPE_PRICE_*`.
-2. Point a webhook at `/api/webhooks/stripe` with these events: `checkout.session.completed`, `customer.subscription.*`, `invoice.paid` and `invoice.payment_failed`.
-3. Set `STRIPE_TAX=true` once Stripe Tax is configured.
+The app takes payments through **Paddle**, selected with `BILLING_PROVIDER=paddle`.
+
+- Paddle is the Merchant of Record. It charges the customer, handles VAT and sales tax, and pays out to your own bank account.
+- **How a payment runs:**
+  1. The server creates a Paddle transaction (`/api/billing/checkout`).
+  2. The browser opens Paddle's checkout overlay on top of the page (`src/lib/checkout-client.ts`).
+  3. Paddle notifies `/api/webhooks/paddle`. That webhook activates plans, grants monthly credits, and records HD purchases and credit packs.
+- Paddle webhook events to subscribe to: `transaction.completed`, `subscription.created`, `subscription.updated`, `subscription.activated`, `subscription.past_due` and `subscription.canceled`.
+- **Payment links:** set Paddle's default payment link to `https://aidopost.com/en/pricing`. The site opens checkouts from `?_ptxn=` links in Paddle's emails.
+- **Stripe** still works if you set `BILLING_PROVIDER=stripe`. Its webhook is `/api/webhooks/stripe`, with the events `checkout.session.completed`, `customer.subscription.*`, `invoice.paid` and `invoice.payment_failed`.
+
+The full step-by-step setup, including connecting your bank account, is in the Railway setup guide.
 
 ## Deploying on Railway
 
@@ -84,7 +93,7 @@ Variables:
 
 - `DATABASE_URL=${{Postgres.DATABASE_URL}}` and `REDIS_URL=${{Redis.REDIS_URL}}`
 - The secrets listed in `.env.example`
-- `STORAGE_DRIVER=s3`, with `S3_ENDPOINT` set for Cloudflare R2
+- `STORAGE_DRIVER=azure` with `AZURE_STORAGE_CONNECTION_STRING` and `AZURE_STORAGE_CONTAINER` (Azure Blob Storage)
 
 Add the custom domains `aidopost.com` and `app.aidopost.com` to the web service.
 
@@ -96,7 +105,7 @@ OAuth redirect URIs:
 ## Implementation notes and deviations from the spec
 
 - **Single package instead of an apps/packages monorepo.** Web and worker share `src/lib` and deploy from the same repo as two Railway services, each with its own watch paths. Splitting it later is mechanical.
-- **Uploads go through the API** instead of browser-to-bucket signed URLs. This lets the server validate, convert HEIC and normalise every photo before storing it. Downloads still use 15-minute signed URLs when S3/R2 is configured.
+- **Uploads go through the API** instead of browser-to-bucket signed URLs. This lets the server validate, convert HEIC and normalise every photo before storing it. Downloads use 15-minute signed links: SAS URLs on Azure Blob Storage, presigned URLs on S3.
 - **Pro "Ultra HD" (4096 px) is an on-demand lanczos upscale** of the standard generation. Re-generating at 4K would produce a different image and costs more than the plan price, as the cost note in the spec explains.
 - **Trial abuse controls** include: one trial per normalised email and per OAuth account (kept even after the account is deleted), a sign-up rate limit per IP, and a disposable-domain blocklist. Device fingerprinting is not implemented yet.
 - **"Try another style" after 3 photos** starts a new session that reuses the same photos and product analysis (open question #2 in the spec).
@@ -104,4 +113,5 @@ OAuth redirect URIs:
 - **Translations** for hy, ar, de, tr, sv and es were drafted by AI and **need native-speaker review** before launch. The same applies to the Terms and Privacy pages, which are drafts for legal review.
 - **Marketing artwork is illustrated SVG** for now. The real gallery (10 industries × 3 styles) should be generated with our own pipeline (Sprint 5).
 - **Gemini model IDs** (`GEMINI_IMAGE_MODEL*`) and prices must be confirmed on the official Gemini docs before launch.
+- **Storage:** production uses Azure Blob Storage with a private container. `STORAGE_DRIVER` also accepts `s3` (any S3-compatible store) and `local` (development).
 - **Sentry is not wired up yet.** `SENTRY_DSN` is reserved for it. PostHog loads only after cookie consent.

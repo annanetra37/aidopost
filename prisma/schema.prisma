@@ -123,16 +123,17 @@ model TrialClaim {
 }
 
 model Subscription {
-  id                   String        @id @default(cuid())
-  userId               String        @unique @map("user_id")
-  stripeCustomerId     String        @unique @map("stripe_customer_id")
-  stripeSubscriptionId String?       @unique @map("stripe_subscription_id")
-  plan                 Plan          @default(free)
-  billingPeriod        BillingPeriod @default(monthly) @map("billing_period")
-  status               String        @default("inactive")
-  currentPeriodEnd     DateTime?     @map("current_period_end")
-  lastGrantAt          DateTime?     @map("last_grant_at")
-  updatedAt            DateTime      @updatedAt @map("updated_at")
+  id                     String        @id @default(cuid())
+  userId                 String        @unique @map("user_id")
+  provider               String        @default("paddle") // paddle | stripe
+  providerCustomerId     String        @unique @map("provider_customer_id")
+  providerSubscriptionId String?       @unique @map("provider_subscription_id")
+  plan                   Plan          @default(free)
+  billingPeriod          BillingPeriod @default(monthly) @map("billing_period")
+  status                 String        @default("inactive")
+  currentPeriodEnd       DateTime?     @map("current_period_end")
+  lastGrantAt            DateTime?     @map("last_grant_at")
+  updatedAt              DateTime      @updatedAt @map("updated_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -250,15 +251,16 @@ model Generation {
 }
 
 model Purchase {
-  id                  String   @id @default(cuid())
-  userId              String   @map("user_id")
-  generationId        String?  @map("generation_id")
-  kind                String   @default("hd_image") // hd_image | credit_pack
-  stripeSessionId     String   @unique @map("stripe_session_id")
-  stripePaymentIntent String?  @map("stripe_payment_intent")
-  amount              Int
-  status              String
-  createdAt           DateTime @default(now()) @map("created_at")
+  id                String   @id @default(cuid())
+  userId            String   @map("user_id")
+  generationId      String?  @map("generation_id")
+  kind              String   @default("hd_image") // hd_image | credit_pack
+  provider          String   @default("paddle")
+  providerRef       String   @unique @map("provider_ref") // Paddle transaction id / Stripe checkout session id
+  providerPaymentId String?  @map("provider_payment_id")
+  amount            Int
+  status            String
+  createdAt         DateTime @default(now()) @map("created_at")
 
   user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   generation Generation? @relation(fields: [generationId], references: [id], onDelete: SetNull)

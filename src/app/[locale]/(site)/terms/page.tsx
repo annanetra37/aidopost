@@ -26,7 +26,7 @@ const SECTIONS: [string, string][] = [
   ],
   [
     "6. Plans, credits and payments",
-    "Each generated image uses one credit. Failed generations are refunded automatically. Monthly allowances do not roll over. Subscriptions renew automatically until cancelled in the billing portal; you keep access until the end of the paid period. Payments are processed by Stripe; VAT may apply.",
+    "Each generated image uses one credit. Failed generations are refunded automatically. Monthly allowances do not roll over. Subscriptions renew automatically until cancelled in the billing portal; you keep access until the end of the paid period. Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders, provides all customer service inquiries and handles returns. VAT or sales tax is added where required. See also our Refund Policy.",
   ],
   [
     "7. Takedown requests",

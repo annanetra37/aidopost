@@ -6,7 +6,7 @@ export const metadata = { title: "Privacy Policy" };
 const SECTIONS: [string, string][] = [
   [
     "What we collect",
-    "Account data (name, email, sign-in provider), brand descriptions you write or approve, product photos you upload, generated images, billing status (via Stripe — we never see full card numbers), and, with your consent, product analytics.",
+    "Account data (name, email, sign-in provider), brand descriptions you write or approve, product photos you upload, generated images, billing status (via Paddle — we never see card numbers), and, with your consent, product analytics.",
   ],
   [
     "Why we use it",
@@ -14,7 +14,7 @@ const SECTIONS: [string, string][] = [
   ],
   [
     "Processors",
-    "Anthropic (AI analysis), Google (image generation), Stripe (payments), Railway (hosting), Cloudflare R2 / AWS (storage), Resend (email), PostHog and Sentry (analytics and error monitoring, consent-based). Data processing agreements are in place with each processor.",
+    "Anthropic (AI analysis), Google (image generation), Paddle (payments, as Merchant of Record), Railway (hosting), Microsoft Azure (photo and image storage), Resend (email), PostHog and Sentry (analytics and error monitoring, consent-based). Data processing agreements are in place with each processor.",
   ],
   [
     "Storage and security",

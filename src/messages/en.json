@@ -132,7 +132,8 @@
     "terms": "Terms of Service",
     "privacy": "Privacy Policy",
     "contact": "Contact",
-    "rights": "© {year} AidoPost. All rights reserved."
+    "rights": "© {year} AidoPost. All rights reserved.",
+    "refunds": "Refund Policy"
   },
   "auth": {
     "title": "Create your free account",
@@ -348,7 +349,8 @@
     "termsTitle": "Terms of Service",
     "privacyTitle": "Privacy Policy",
     "updated": "Last updated: {date}",
-    "draft": "Draft for legal review — not yet final."
+    "draft": "Draft for legal review — not yet final.",
+    "refundsTitle": "Refund Policy"
   },
   "common": {
     "back": "Back",
