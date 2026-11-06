@@ -26,7 +26,11 @@
     "before": "Before",
     "after": "After",
     "sliderLabel": "Drag to compare the phone photo with the AidoPost result",
-    "trust": "Loved by makers in Yerevan, Dubai, Istanbul, Berlin & beyond"
+    "proof1": "Your product, untouched — only the scene changes",
+    "proof2": "Studio-quality shots in under 30 seconds",
+    "proof3": "No photographer. No studio. No editing skills.",
+    "beforeAlt": "Phone photo of an enamel silver signet ring held between fingers",
+    "afterAlt": "The same ring staged by AidoPost on black marble with studio lighting"
   },
   "how": {
     "kicker": "How it works",

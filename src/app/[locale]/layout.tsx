@@ -65,10 +65,7 @@ export async function generateMetadata({
 }
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbfaff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b0716" },
-  ],
+  themeColor: "#fbfaff",
 };
 
 // Applies the stored theme before paint (no flash).

@@ -23,23 +23,6 @@
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0b0716;
-    --bg-soft: #140d26;
-    --fg: #f3f0ff;
-    --muted: #a59fc2;
-    --line: rgb(243 240 255 / 0.1);
-    --card: rgb(28 20 52 / 0.6);
-    --card-solid: #1a1230;
-    --blob-1: #5b21b6;
-    --blob-2: #9d174d;
-    --blob-3: #92400e;
-    --shadow: 0 10px 40px -12px rgb(0 0 0 / 0.6);
-    color-scheme: dark;
-  }
-}
-
 :root[data-theme="dark"] {
   --bg: #0b0716;
   --bg-soft: #140d26;

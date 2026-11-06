@@ -1,10 +1,14 @@
+import Image from "next/image";
 import { useTranslations } from "next-intl";
+import ringBefore from "../../../public/hero/ring-before.webp";
+import ringAfter from "../../../public/hero/ring-after.webp";
 import { LOCALE_LABELS, LOCALES } from "@/i18n/routing";
 import { ProductScene } from "../art/ProductScene";
 import { Reveal } from "./Reveal";
 
 export function Bento() {
   const t = useTranslations("benefits");
+  const th = useTranslations("hero");
   return (
     <section className="mx-auto max-w-6xl px-4 py-20">
       <Reveal>
@@ -23,15 +27,19 @@ export function Bento() {
               <p className="mt-2 text-muted">{t("exactText")}</p>
             </div>
             <div className="mt-6 grid grid-cols-2 gap-3 md:mt-0 md:w-1/2">
-              <ProductScene
-                product="serum"
-                style="phone"
-                className="aspect-square w-full rounded-2xl"
+              <Image
+                src={ringBefore}
+                alt={th("beforeAlt")}
+                sizes="240px"
+                placeholder="blur"
+                className="aspect-square w-full rounded-2xl object-cover"
               />
-              <ProductScene
-                product="serum"
-                style="casual"
-                className="aspect-square w-full rounded-2xl"
+              <Image
+                src={ringAfter}
+                alt={th("afterAlt")}
+                sizes="240px"
+                placeholder="blur"
+                className="aspect-square w-full rounded-2xl object-cover"
               />
             </div>
           </div>

@@ -1,17 +1,13 @@
 "use client";
 import { useCallback, useRef, useState } from "react";
+import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
-import { ProductScene, type ArtProduct, type ArtStyle } from "../art/ProductScene";
 import { dir } from "@/i18n/routing";
+import ringBefore from "../../../public/hero/ring-before.webp";
+import ringAfter from "../../../public/hero/ring-after.webp";
 
-/** Interactive before/after slider: phone photo → AidoPost result. Keyboard accessible. */
-export function BeforeAfter({
-  product = "perfume",
-  style = "premium",
-}: {
-  product?: ArtProduct;
-  style?: ArtStyle;
-}) {
+/** Interactive before/after slider: real phone photo → AidoPost result. Keyboard accessible. */
+export function BeforeAfter() {
   const t = useTranslations("hero");
   const rtl = dir(useLocale()) === "rtl";
   const [pos, setPos] = useState(50);
@@ -31,21 +27,37 @@ export function BeforeAfter({
   return (
     <div
       ref={ref}
-      className="relative aspect-square w-full touch-none select-none overflow-hidden rounded-[32px] shadow-soft ring-1 ring-line"
+      className="relative aspect-square w-full touch-none select-none overflow-hidden rounded-[32px] bg-neutral-900 shadow-soft ring-1 ring-line"
       onPointerDown={(e) => {
         (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
         move(e.clientX);
       }}
       onPointerMove={(e) => e.buttons === 1 && move(e.clientX)}
     >
-      <ProductScene product={product} style={style} className="absolute inset-0 h-full w-full" />
+      <Image
+        src={ringAfter}
+        alt={t("afterAlt")}
+        fill
+        priority
+        sizes="(min-width: 768px) 520px, 100vw"
+        placeholder="blur"
+        className="pointer-events-none object-cover"
+      />
       <div
         className="absolute inset-0"
         style={{ clipPath: rtl ? `inset(0 0 0 ${100 - pos}%)` : `inset(0 ${100 - pos}% 0 0)` }}
       >
-        <ProductScene product={product} style="phone" className="absolute inset-0 h-full w-full" />
+        <Image
+          src={ringBefore}
+          alt={t("beforeAlt")}
+          fill
+          priority
+          sizes="(min-width: 768px) 520px, 100vw"
+          placeholder="blur"
+          className="pointer-events-none object-cover"
+        />
       </div>
-      <span className="glass absolute start-4 top-4 rounded-full px-3 py-1 text-xs font-semibold">
+      <span className="absolute start-4 top-4 rounded-full bg-black/55 px-3 py-1 text-xs font-semibold text-white backdrop-blur">
         {t("before")}
       </span>
       <span className="absolute end-4 top-4 rounded-full bg-brand px-3 py-1 text-xs font-semibold text-white">

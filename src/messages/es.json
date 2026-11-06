@@ -26,7 +26,11 @@
     "before": "Antes",
     "after": "Después",
     "sliderLabel": "Arrastra para comparar la foto del teléfono con el resultado de AidoPost",
-    "trust": "Lo adoran creadores en Ereván, Dubái, Estambul, Berlín y más allá"
+    "proof1": "Tu producto, intacto: solo cambia la escena",
+    "proof2": "Fotos con calidad de estudio en menos de 30 segundos",
+    "proof3": "Sin fotógrafo. Sin estudio. Sin saber editar.",
+    "beforeAlt": "Foto con el teléfono de un anillo de plata esmaltado sostenido entre los dedos",
+    "afterAlt": "El mismo anillo, presentado por AidoPost sobre mármol negro con luz de estudio"
   },
   "how": {
     "kicker": "Cómo funciona",

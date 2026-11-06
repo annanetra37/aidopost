@@ -32,20 +32,18 @@ export function Hero() {
             </Link>
           </div>
           <p className="mt-3 text-sm text-muted">✓ {t("ctaNote")}</p>
-          <div className="mt-10 flex items-center gap-3 text-sm text-muted">
-            <div className="flex -space-x-2 rtl:space-x-reverse">
-              {["#f9a8d4", "#c4b5fd", "#fcd34d", "#86efac"].map((c, i) => (
-                <span
-                  key={c}
-                  className="grid h-8 w-8 place-items-center rounded-full border-2 border-bg text-xs font-bold text-white"
-                  style={{ background: c }}
-                >
-                  {"ANSE"[i]}
+          <ul className="mt-10 grid gap-3 sm:max-w-xl">
+            {(["proof1", "proof2", "proof3"] as const).map((k) => (
+              <li key={k} className="flex items-center gap-3 text-base font-semibold">
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand text-white shadow-soft">
+                  <svg viewBox="0 0 20 20" className="h-4 w-4" fill="currentColor" aria-hidden>
+                    <path d="M7.6 13.2 4.4 10l-1.4 1.4 4.6 4.6 9.4-9.4L15.6 5Z" />
+                  </svg>
                 </span>
-              ))}
-            </div>
-            {t("trust")}
-          </div>
+                {t(k)}
+              </li>
+            ))}
+          </ul>
         </Reveal>
         <Reveal delay={0.15}>
           <div className="relative">
