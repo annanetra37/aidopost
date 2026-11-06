@@ -26,7 +26,11 @@
     "before": "Vorher",
     "after": "Nachher",
     "sliderLabel": "Ziehen, um das Handyfoto mit dem AidoPost-Ergebnis zu vergleichen",
-    "trust": "Beliebt bei Kreativen in Jerewan, Dubai, Istanbul, Berlin und darüber hinaus"
+    "proof1": "Dein Produkt bleibt unverändert – nur die Szene ändert sich",
+    "proof2": "Fotos in Studioqualität in unter 30 Sekunden",
+    "proof3": "Kein Fotograf. Kein Studio. Keine Bildbearbeitung.",
+    "beforeAlt": "Handyfoto eines emaillierten Silber-Siegelrings zwischen den Fingern",
+    "afterAlt": "Derselbe Ring, von AidoPost auf schwarzem Marmor im Studiolicht inszeniert"
   },
   "how": {
     "kicker": "So funktioniert’s",

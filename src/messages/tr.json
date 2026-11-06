@@ -26,7 +26,11 @@
     "before": "Önce",
     "after": "Sonra",
     "sliderLabel": "Telefon fotoğrafını AidoPost sonucuyla karşılaştırmak için kaydır",
-    "trust": "Erivan, Dubai, İstanbul, Berlin ve daha birçok şehirdeki üreticilerin favorisi"
+    "proof1": "Ürünün olduğu gibi kalır — sadece sahne değişir",
+    "proof2": "30 saniyeden kısa sürede stüdyo kalitesinde fotoğraflar",
+    "proof3": "Fotoğrafçı yok. Stüdyo yok. Düzenleme bilgisi gerekmez.",
+    "beforeAlt": "Parmaklar arasında tutulan mineli gümüş yüzüğün telefonla çekilmiş fotoğrafı",
+    "afterAlt": "Aynı yüzük, AidoPost ile siyah mermer üzerinde stüdyo ışığıyla"
   },
   "how": {
     "kicker": "Nasıl çalışır",

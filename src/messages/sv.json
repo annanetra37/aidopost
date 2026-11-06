@@ -26,7 +26,11 @@
     "before": "Före",
     "after": "Efter",
     "sliderLabel": "Dra för att jämföra mobilbilden med resultatet från AidoPost",
-    "trust": "Älskad av kreatörer i Jerevan, Dubai, Istanbul, Berlin och fler städer"
+    "proof1": "Din produkt förblir orörd – bara miljön ändras",
+    "proof2": "Bilder i studiokvalitet på under 30 sekunder",
+    "proof3": "Ingen fotograf. Ingen studio. Ingen redigering.",
+    "beforeAlt": "Mobilbild av en emaljerad silverring mellan fingrarna",
+    "afterAlt": "Samma ring, iscensatt av AidoPost på svart marmor i studioljus"
   },
   "how": {
     "kicker": "Så funkar det",
