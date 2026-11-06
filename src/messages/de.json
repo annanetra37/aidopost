@@ -132,7 +132,8 @@
     "terms": "Nutzungsbedingungen",
     "privacy": "Datenschutz",
     "contact": "Kontakt",
-    "rights": "© {year} AidoPost. Alle Rechte vorbehalten."
+    "rights": "© {year} AidoPost. Alle Rechte vorbehalten.",
+    "refunds": "Rückerstattung"
   },
   "auth": {
     "title": "Erstelle dein kostenloses Konto",
@@ -348,7 +349,8 @@
     "termsTitle": "Nutzungsbedingungen",
     "privacyTitle": "Datenschutzerklärung",
     "updated": "Zuletzt aktualisiert: {date}",
-    "draft": "Entwurf zur rechtlichen Prüfung – noch nicht final."
+    "draft": "Entwurf zur rechtlichen Prüfung – noch nicht final.",
+    "refundsTitle": "Rückerstattungsrichtlinie"
   },
   "common": {
     "back": "Zurück",

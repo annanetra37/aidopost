@@ -5,6 +5,7 @@ import { Modal } from "./Modal";
 import { api } from "./api";
 import { useStudio } from "./StudioContext";
 import { track } from "@/lib/analytics";
+import { startCheckout } from "@/lib/checkout-client";
 import type { AspectRatio } from "@/lib/plans";
 
 type Ent = {
@@ -27,6 +28,7 @@ export function DownloadModal({
   onClose: () => void;
 }) {
   const t = useTranslations("studio.download");
+  const te = useTranslations("studio.errors");
   const ts = useTranslations("studio.style");
   const locale = useLocale();
   const { openPaywall } = useStudio();
@@ -51,19 +53,12 @@ export function DownloadModal({
   const buyHd = async () => {
     setBuying(true);
     try {
-      const { url } = await api<{ url: string }>("/api/billing/checkout", {
-        method: "POST",
-        json: {
-          kind: "hd_image",
-          generationId,
-          locale,
-          returnPath: `/studio?session=${sessionId}`,
-        },
-      });
       track("checkout_started", { kind: "hd_image" });
-      window.location.href = url;
+      await startCheckout({ kind: "hd_image", generationId, locale, returnPath: `/studio?session=${sessionId}` });
     } catch (e) {
-      alert((e as Error).message);
+      const code = (e as Error).message;
+      alert(te.has(code) ? te(code) : te("generic"));
+    } finally {
       setBuying(false);
     }
   };

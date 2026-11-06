@@ -92,6 +92,11 @@ export function Footer() {
                 {t("privacy")}
               </Link>
             </li>
+            <li>
+              <Link href="/refunds" className="hover:text-fg">
+                {t("refunds")}
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

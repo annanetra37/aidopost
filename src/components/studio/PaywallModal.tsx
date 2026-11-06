@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Modal } from "./Modal";
 import { PricingCards } from "../landing/Pricing";
-import { api } from "./api";
+import { startCheckout } from "@/lib/checkout-client";
 import type { PlanId } from "@/lib/plans";
 
 export function PaywallModal({
@@ -16,18 +16,17 @@ export function PaywallModal({
   plan: PlanId;
 }) {
   const t = useTranslations("studio.paywall");
+  const te = useTranslations("studio.errors");
   const locale = useLocale();
   const [busy, setBusy] = useState(false);
   const buyPack = async () => {
     setBusy(true);
     try {
-      const { url } = await api<{ url: string }>("/api/billing/checkout", {
-        method: "POST",
-        json: { kind: "credit_pack", locale },
-      });
-      window.location.href = url;
+      await startCheckout({ kind: "credit_pack", locale });
     } catch (e) {
-      alert((e as Error).message);
+      const code = (e as Error).message;
+      alert(te.has(code) ? te(code) : te("generic"));
+    } finally {
       setBusy(false);
     }
   };

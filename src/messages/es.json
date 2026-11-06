@@ -132,7 +132,8 @@
     "terms": "Términos del servicio",
     "privacy": "Política de privacidad",
     "contact": "Contacto",
-    "rights": "© {year} AidoPost. Todos los derechos reservados."
+    "rights": "© {year} AidoPost. Todos los derechos reservados.",
+    "refunds": "Reembolsos"
   },
   "auth": {
     "title": "Crea tu cuenta gratis",
@@ -348,7 +349,8 @@
     "termsTitle": "Términos del servicio",
     "privacyTitle": "Política de privacidad",
     "updated": "Última actualización: {date}",
-    "draft": "Borrador pendiente de revisión legal; aún no es definitivo."
+    "draft": "Borrador pendiente de revisión legal; aún no es definitivo.",
+    "refundsTitle": "Política de reembolso"
   },
   "common": {
     "back": "Atrás",

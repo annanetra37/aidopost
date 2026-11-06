@@ -20,7 +20,7 @@ export async function GET() {
     plan: user.plan,
     uiLanguage: user.uiLanguage,
     credits,
-    subscription: sub?.stripeSubscriptionId
+    subscription: sub?.providerSubscriptionId
       ? { status: sub.status, period: sub.billingPeriod, currentPeriodEnd: sub.currentPeriodEnd }
       : null,
   });

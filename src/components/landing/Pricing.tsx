@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { PLANS, annualSavingsPct, type Period, type PlanId } from "@/lib/plans";
 import { track } from "@/lib/analytics";
+import { startCheckout } from "@/lib/checkout-client";
 import { useAuthModal } from "../site/AuthModal";
 
 function features(id: PlanId, t: ReturnType<typeof useTranslations>) {
@@ -41,6 +42,7 @@ export function PricingCards({
   returnPath?: string;
 }) {
   const t = useTranslations("pricing");
+  const te = useTranslations("studio.errors");
   const locale = useLocale();
   const { openAuth, signedIn } = useAuthModal();
   const [period, setPeriod] = useState<Period>("annual");
@@ -56,15 +58,14 @@ export function PricingCards({
     if (!signedIn) return openAuth("signup");
     setBusy(id);
     track("checkout_started", { plan: id, period });
-    const res = await fetch("/api/billing/checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ kind: `${id}_${period}`, locale, returnPath }),
-    });
-    const data = await res.json().catch(() => ({}));
-    setBusy(null);
-    if (data.url) window.location.href = data.url;
-    else alert(data.error ?? "Error");
+    try {
+      await startCheckout({ kind: `${id}_${period}`, locale, returnPath });
+    } catch (e) {
+      const code = (e as Error).message;
+      alert(te.has(code) ? te(code) : te("generic"));
+    } finally {
+      setBusy(null);
+    }
   }
 
   const plans: PlanId[] = compact ? ["lite", "pro"] : ["free", "lite", "pro"];

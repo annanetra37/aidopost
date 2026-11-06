@@ -4,7 +4,7 @@ export async function LegalPage({
   titleKey,
   sections,
 }: {
-  titleKey: "termsTitle" | "privacyTitle";
+  titleKey: "termsTitle" | "privacyTitle" | "refundsTitle";
   sections: [string, string][];
 }) {
   const t = await getTranslations("legal");

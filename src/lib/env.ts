@@ -16,7 +16,11 @@ export const env = {
   braveKey: opt("BRAVE_SEARCH_API_KEY"),
   resendKey: opt("RESEND_API_KEY"),
   emailFrom: opt("EMAIL_FROM", "AidoPost <hello@aidopost.com>"),
-  storageDriver: opt("STORAGE_DRIVER", "local") as "local" | "s3",
+  storageDriver: opt("STORAGE_DRIVER", "local") as "local" | "azure" | "s3",
+  azure: {
+    connectionString: opt("AZURE_STORAGE_CONNECTION_STRING"),
+    container: opt("AZURE_STORAGE_CONTAINER", "aidopost"),
+  },
   localStorageDir: opt("LOCAL_STORAGE_DIR", "./storage"),
   s3: {
     bucket: opt("S3_BUCKET"),
@@ -24,17 +28,5 @@ export const env = {
     endpoint: opt("S3_ENDPOINT"),
     accessKeyId: opt("S3_ACCESS_KEY_ID"),
     secretAccessKey: opt("S3_SECRET_ACCESS_KEY"),
-  },
-  stripe: {
-    secretKey: opt("STRIPE_SECRET_KEY"),
-    webhookSecret: opt("STRIPE_WEBHOOK_SECRET"),
-    prices: {
-      lite_monthly: opt("STRIPE_PRICE_LITE_MONTHLY"),
-      lite_annual: opt("STRIPE_PRICE_LITE_ANNUAL"),
-      pro_monthly: opt("STRIPE_PRICE_PRO_MONTHLY"),
-      pro_annual: opt("STRIPE_PRICE_PRO_ANNUAL"),
-      hd_image: opt("STRIPE_PRICE_HD_IMAGE"),
-      credit_pack: opt("STRIPE_PRICE_CREDIT_PACK"),
-    },
   },
 };

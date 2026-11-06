@@ -132,7 +132,8 @@
     "terms": "Hizmet Koşulları",
     "privacy": "Gizlilik Politikası",
     "contact": "İletişim",
-    "rights": "© {year} AidoPost. Tüm hakları saklıdır."
+    "rights": "© {year} AidoPost. Tüm hakları saklıdır.",
+    "refunds": "İade politikası"
   },
   "auth": {
     "title": "Ücretsiz hesabını oluştur",
@@ -348,7 +349,8 @@
     "termsTitle": "Hizmet Koşulları",
     "privacyTitle": "Gizlilik Politikası",
     "updated": "Son güncelleme: {date}",
-    "draft": "Hukuki inceleme taslağı — henüz kesinleşmedi."
+    "draft": "Hukuki inceleme taslağı — henüz kesinleşmedi.",
+    "refundsTitle": "İade politikası"
   },
   "common": {
     "back": "Geri",

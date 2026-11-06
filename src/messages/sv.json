@@ -132,7 +132,8 @@
     "terms": "Användarvillkor",
     "privacy": "Integritetspolicy",
     "contact": "Kontakt",
-    "rights": "© {year} AidoPost. Alla rättigheter förbehållna."
+    "rights": "© {year} AidoPost. Alla rättigheter förbehållna.",
+    "refunds": "Återbetalning"
   },
   "auth": {
     "title": "Skapa ditt gratiskonto",
@@ -348,7 +349,8 @@
     "termsTitle": "Användarvillkor",
     "privacyTitle": "Integritetspolicy",
     "updated": "Senast uppdaterad: {date}",
-    "draft": "Utkast för juridisk granskning – ännu inte slutgiltigt."
+    "draft": "Utkast för juridisk granskning – ännu inte slutgiltigt.",
+    "refundsTitle": "Återbetalningspolicy"
   },
   "common": {
     "back": "Tillbaka",

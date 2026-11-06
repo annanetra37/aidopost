@@ -3,7 +3,7 @@ import { LOCALES } from "@/i18n/routing";
 import { env } from "@/lib/env";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const pages = ["", "/pricing", "/terms", "/privacy"];
+  const pages = ["", "/pricing", "/terms", "/privacy", "/refunds"];
   return pages.flatMap((p) =>
     LOCALES.map((l) => ({
       url: `${env.appUrl}/${l}${p}`,
